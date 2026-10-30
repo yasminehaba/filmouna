@@ -1,0 +1,7 @@
+{
+  "name": "filmouna",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
