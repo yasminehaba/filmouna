@@ -79,4 +79,8 @@ export const routes: Routes = [
     path: 'edit-pwd',
     loadComponent: () => import('./pages/edit-pwd/edit-pwd.page').then((m) => m.EditPwdPage),
   },
+  {
+    path: 'forgot-password',
+    loadComponent: () => import('./pages/forgot-password/forgot-password.page').then((m) => m.ForgotPasswordPage),
+  },
 ];
