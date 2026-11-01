@@ -1,13 +1,75 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>movies</ion-title>
+    <ion-title>Films</ion-title>
+  </ion-toolbar>
+
+  <!-- Barre de recherche fixe (dans le header) -->
+  <ion-toolbar>
+    <ion-searchbar
+      placeholder="Rechercher un film"
+      [value]="search()"
+      (ionInput)="search.set($event.detail.value ?? '')">
+    </ion-searchbar>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">movies</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  @if (loading()) {
+    <div class="center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  } @else if (filteredMovies().length === 0) {
+    <div class="center empty">
+      <ion-icon name="film-outline"></ion-icon>
+      <p>Aucun film à afficher</p>
+    </div>
+  } @else {
+    <ion-list>
+      @for (film of filteredMovies(); track film.id) {
+        <ion-item button [routerLink]="['/movie-details', film.id]">
+          <ion-thumbnail slot="start">
+            <img [src]="film.photo" [alt]="film.title" />
+          </ion-thumbnail>
+
+          <ion-label>
+            <h2>{{ film.title }}</h2>
+            <p>{{ film.year }} · {{ film.duration }} min</p>
+            <p>{{ film.categories.join(', ') }}</p>
+          </ion-label>
+
+          @if (isAdmin()) {
+            <!-- Admin : modifier / supprimer -->
+            <ion-buttons slot="end">
+              <ion-button (click)="editMovie(film, $event)">
+                <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+              </ion-button>
+              <ion-button color="danger" (click)="deleteMovie(film, $event)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          } @else {
+            <!-- Utilisateur : favori -->
+            <ion-button fill="clear" slot="end" (click)="toggleFavorite(film, $event)">
+              <ion-icon
+                slot="icon-only"
+                color="danger"
+                [name]="isFavorite(film.id!) ? 'heart' : 'heart-outline'">
+              </ion-icon>
+            </ion-button>
+          }
+        </ion-item>
+      }
+    </ion-list>
+  }
+
+  <!-- Admin : bouton flottant pour ajouter un film -->
+  @if (isAdmin()) {
+    <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+      <ion-fab-button (click)="addMovie()">
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+  }
+
 </ion-content>

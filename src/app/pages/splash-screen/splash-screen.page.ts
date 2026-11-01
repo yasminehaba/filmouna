@@ -25,10 +25,8 @@ export class SplashScreenPage implements OnInit {
     } else if (user.disabled) {
       await this.auth.logout();
       this.go('/login');
-    } else if (user.role === 'admin') {
-      this.go('/admin');
     } else {
-      this.go('/home');
+      this.go('/tabs/movies');
     }
   }
 

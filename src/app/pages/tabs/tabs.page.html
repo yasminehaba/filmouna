@@ -1,0 +1,32 @@
+<ion-tabs>
+  <ion-tab-bar slot="bottom">
+
+    <ion-tab-button tab="movies">
+      <ion-icon name="film-outline"></ion-icon>
+      <ion-label>Films</ion-label>
+    </ion-tab-button>
+
+    @if (isAdmin()) {
+      <ion-tab-button tab="users">
+        <ion-icon name="people-outline"></ion-icon>
+        <ion-label>Users</ion-label>
+      </ion-tab-button>
+    } @else {
+      <ion-tab-button tab="favorites">
+        <ion-icon name="heart-outline"></ion-icon>
+        <ion-label>Favoris</ion-label>
+      </ion-tab-button>
+
+      <ion-tab-button tab="matching">
+        <ion-icon name="sparkles-outline"></ion-icon>
+        <ion-label>Matching</ion-label>
+      </ion-tab-button>
+    }
+
+    <ion-tab-button tab="profile">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Profil</ion-label>
+    </ion-tab-button>
+
+  </ion-tab-bar>
+</ion-tabs>

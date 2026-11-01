@@ -98,16 +98,8 @@ export class LoginPage {
         return;
       }
 
-      // Redirection
-      if (currentUser?.role === 'admin') {
-
-      await this.router.navigateByUrl('/admin');
-
-    } else {
-
-      await this.router.navigateByUrl('/home');
-
-    }
+      // Redirection 
+      await this.router.navigateByUrl('/tabs/movies', { replaceUrl: true });
 
     } catch (error: any) {
 

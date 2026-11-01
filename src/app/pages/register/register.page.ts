@@ -221,7 +221,7 @@ export class RegisterPage {
       console.log('New user:', newUser);
 
       // Redirection après inscription
-      await this.router.navigateByUrl('/home');
+      await this.router.navigateByUrl('/tabs/movies', { replaceUrl: true });
 
     } catch (error: any) {
 
