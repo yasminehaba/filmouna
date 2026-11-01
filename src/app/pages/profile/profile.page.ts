@@ -1,8 +1,9 @@
 
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
+  NavController,
   IonContent,
   IonCard,
   IonCardContent,
@@ -90,12 +91,15 @@ export class ProfilePage {
     }
   }
 
+  private navCtrl = inject(NavController);
+
+  // Pages hors des tabs : détruites au retour, recréées à chaque ouverture
   async editProfile() {
-    await this.router.navigate(['/tabs/edit-profile']);
+    await this.navCtrl.navigateForward('/edit-profile');
   }
 
   async editPassword() {
-    await this.router.navigate(['/tabs/edit-pwd']);
+    await this.navCtrl.navigateForward('/edit-pwd');
   }
 
   async logout() {

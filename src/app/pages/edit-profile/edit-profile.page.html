@@ -26,7 +26,7 @@
          
 <div class="photo-section">
 
-  <label class="photo-upload">
+  <div class="photo-upload" (click)="presentActionSheet()">
 
     @if (photoPreview()) {
       <img
@@ -42,14 +42,7 @@
       <ion-icon name="camera-outline"></ion-icon>
     </span>
 
-    <input
-      type="file"
-      accept="image/*"
-      (change)="onPhotoSelected($event)"
-      hidden
-    />
-
-  </label>
+  </div>
 
   <p>Appuyez pour changer votre photo</p>
 

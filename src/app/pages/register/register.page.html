@@ -18,7 +18,7 @@
           <!-- Profile Photo -->
           <div class="photo-section">
 
-            <label for="photoInput" class="photo-upload">
+            <div class="photo-upload" (click)="presentActionSheet()">
 
               <img
                 *ngIf="photoPreview()"
@@ -34,14 +34,7 @@
                 <ion-icon name="camera-outline"></ion-icon>
               </span>
 
-            </label>
-
-            <input
-              id="photoInput"
-              type="file"
-              accept="image/*"
-              (change)="onPhotoSelected($event)"
-              hidden>
+            </div>
 
             <h3>Profile Photo</h3>
             <p>Choose a profile picture (optional)</p>

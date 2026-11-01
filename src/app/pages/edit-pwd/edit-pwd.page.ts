@@ -1,9 +1,11 @@
 
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import {
+  NavController,
+  ToastController,
   IonContent,
   IonCard,
   IonCardContent,
@@ -58,6 +60,9 @@ export class EditPwdPage {
   errorMessage = signal('');
   successMessage = signal('');
 
+  private navCtrl = inject(NavController);
+  private toastCtrl = inject(ToastController);
+
   constructor(
     private authService: Auth,
     private router: Router
@@ -108,15 +113,17 @@ export class EditPwdPage {
     try {
       await this.authService.changePassword(current, newPwd);
 
-      this.successMessage.set(
-        'Votre mot de passe a été modifié avec succès.'
-      );
+      // Message visible au-dessus de la page profil
+      const toast = await this.toastCtrl.create({
+        message: 'Votre mot de passe a été modifié avec succès.',
+        duration: 2000,
+        color: 'success',
+        position: 'bottom',
+      });
+      await toast.present();
 
-      this.currentPassword.set('');
-      this.newPassword.set('');
-      this.confirmPassword.set('');
-
-      await this.router.navigateByUrl('/tabs/profile');
+      // Retour : la page est détruite
+      this.navCtrl.navigateBack('/tabs/profile');
 
     } catch (error: any) {
       console.error(error);
@@ -149,6 +156,6 @@ export class EditPwdPage {
   }
 
   async goBack() {
-    await this.router.navigateByUrl('/tabs/profile');
+    this.navCtrl.navigateBack('/tabs/profile');
   }
 }

@@ -1,13 +1,60 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>matching</ion-title>
+    <ion-title>Matching</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">matching</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  @if (loading()) {
+    <div class="center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  } @else if (!hasFavorites()) {
+    <div class="center empty">
+      <ion-icon name="heart-outline"></ion-icon>
+      <p>Ajoutez des films à vos favoris pour trouver des utilisateurs similaires.</p>
+    </div>
+  } @else if (matches().length === 0) {
+    <div class="center empty">
+      <ion-icon name="sparkles-outline"></ion-icon>
+      <p>Aucun utilisateur ne correspond à plus de {{ minScore }}%.</p>
+    </div>
+  } @else {
+    <ion-list>
+      @for (m of matches(); track m.user.uid) {
+        <ion-item lines="full">
+
+          <ion-avatar slot="start">
+            @if (m.user.photo) {
+              <img [src]="m.user.photo" alt="Photo" />
+            } @else {
+              <ion-icon name="person-circle-outline" class="default-avatar"></ion-icon>
+            }
+          </ion-avatar>
+
+          <ion-label>
+            <div class="top">
+              <h2>{{ m.user.prenom }} {{ m.user.nom }}</h2>
+              <span class="score">{{ m.score }}%</span>
+            </div>
+
+            <ion-progress-bar [value]="m.score / 100" color="success"></ion-progress-bar>
+
+            @if (m.commonMovies.length) {
+              <p><ion-icon name="film-outline"></ion-icon> {{ m.commonMovies.join(', ') }}</p>
+            }
+            @if (m.commonGenres.length) {
+              <p><ion-icon name="pricetag-outline"></ion-icon> {{ m.commonGenres.join(', ') }}</p>
+            }
+            @if (m.commonActors.length) {
+              <p><ion-icon name="people-outline"></ion-icon> {{ m.commonActors.join(', ') }}</p>
+            }
+          </ion-label>
+
+        </ion-item>
+      }
+    </ion-list>
+  }
+
 </ion-content>

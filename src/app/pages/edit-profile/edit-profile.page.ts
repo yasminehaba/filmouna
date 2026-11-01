@@ -1,9 +1,11 @@
 
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { NavController, ToastController } from '@ionic/angular';
 
 import {
+  ActionSheetController,
   IonContent,
   IonCard,
   IonCardContent,
@@ -22,11 +24,14 @@ import {
   personOutline,
   mailOutline,
   cameraOutline,
+  camera,
+  image,
   saveOutline,
   arrowBackOutline
 } from 'ionicons/icons';
 
 import { Auth } from '../../services/auth';
+import { Photo } from '../../services/photo';
 import { AppUser } from '../../models/user.model';
 
 @Component({
@@ -68,14 +73,21 @@ export class EditProfilePage {
   selectedPhoto = signal<File | null>(null);
   photoPreview = signal('');
 
+  private actionSheet = inject(ActionSheetController);
+  private photoSer = inject(Photo);
+  private toastCtrl = inject(ToastController);
+
   constructor(
     private authService: Auth,
-    private router: Router
+    private router: Router,
+    private navCtrl: NavController
   ) {
     addIcons({
       personOutline,
       mailOutline,
       cameraOutline,
+      camera,
+      image,
       saveOutline,
       arrowBackOutline
     });
@@ -138,23 +150,55 @@ export class EditProfilePage {
     }));
   }
 
-  onPhotoSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+  // Demander : caméra ou galerie ?
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheet.create({
+      header: 'Photo de profil',
+      buttons: [
+        {
+          text: 'Prendre une photo',
+          icon: 'camera',
+          handler: async () => {
+            try {
+              const photo = await this.photoSer.prendrePhoto();
+              this.setPhoto(await this.photoSer.toFile(photo));
+            } catch {
+              // L'utilisateur a annulé
+            }
+          },
+        },
+        {
+          text: 'Choisir depuis la galerie',
+          icon: 'image',
+          handler: async () => {
+            try {
+              const photos = await this.photoSer.choisirPhotos();
+              if (photos[0]) {
+                this.setPhoto(await this.photoSer.toFile(photos[0]));
+              }
+            } catch {
+              // L'utilisateur a annulé
+            }
+          },
+        },
+        { text: 'Annuler', role: 'cancel' },
+      ],
+    });
 
-    if (!file) return;
+    await actionSheet.present();
+  }
 
+  // Vérifier et afficher la photo choisie
+  setPhoto(file: File) {
     this.errorMessage.set('');
 
     if (!file.type.startsWith('image/')) {
       this.errorMessage.set('Veuillez sélectionner une image.');
-      input.value = '';
       return;
     }
 
     if (file.size > 5 * 1024 * 1024) {
       this.errorMessage.set('La taille de l’image ne doit pas dépasser 5 MB.');
-      input.value = '';
       return;
     }
 
@@ -269,9 +313,17 @@ export class EditProfilePage {
         }
       );
 
-      this.successMessage.set('Profil modifié avec succès.');
+      // Message visible au-dessus de la page profil
+      const toast = await this.toastCtrl.create({
+        message: 'Profil modifié avec succès.',
+        duration: 2000,
+        color: 'success',
+        position: 'bottom',
+      });
+      await toast.present();
 
-      await this.router.navigateByUrl('/tabs/profile');
+      // Retour : la page est détruite
+      this.navCtrl.navigateBack('/tabs/profile');
 
     } catch (error: any) {
       console.error(error);
@@ -286,6 +338,7 @@ export class EditProfilePage {
   }
 
   async goBack() {
-    await this.router.navigateByUrl('/tabs/profile');
+    //await this.router.navigateByUrl('/tabs/profile');
+     this.navCtrl.navigateBack('/tabs/profile');
   }
 }

@@ -1,9 +1,10 @@
 
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import {
+  ActionSheetController,
   IonContent,
   IonCard,
   IonCardContent,
@@ -26,10 +27,13 @@ import {
   mailOutline,
   lockClosedOutline,
   personCircleOutline,
-  cameraOutline
+  cameraOutline,
+  camera,
+  image
 } from 'ionicons/icons';
 
 import { Auth } from '../../services/auth';
+import { Photo } from '../../services/photo';
 
 @Component({
   selector: 'app-register',
@@ -64,6 +68,9 @@ export class RegisterPage {
   // Aperçu de la photo
   photoPreview = signal('');
 
+  private actionSheet = inject(ActionSheetController);
+  private photoSer = inject(Photo);
+
   constructor(
     private authService: Auth,
     private router: Router
@@ -73,29 +80,62 @@ export class RegisterPage {
       mailOutline,
       lockClosedOutline,
       personCircleOutline,
-      cameraOutline
+      cameraOutline,
+      camera,
+      image
     });
   }
 
-  // Sélection de la photo de profil
-  onPhotoSelected(event: Event) {
+  // Demander : caméra ou galerie ?
+  async presentActionSheet() {
+    const actionSheet = await this.actionSheet.create({
+      header: 'Photo de profil',
+      buttons: [
+        {
+          text: 'Prendre une photo',
+          icon: 'camera',
+          handler: async () => {
+            try {
+              const photo = await this.photoSer.prendrePhoto();
+              this.setPhoto(await this.photoSer.toFile(photo));
+            } catch {
+              // L'utilisateur a annulé
+            }
+          },
+        },
+        {
+          text: 'Choisir depuis la galerie',
+          icon: 'image',
+          handler: async () => {
+            try {
+              const photos = await this.photoSer.choisirPhotos();
+              if (photos[0]) {
+                this.setPhoto(await this.photoSer.toFile(photos[0]));
+              }
+            } catch {
+              // L'utilisateur a annulé
+            }
+          },
+        },
+        { text: 'Annuler', role: 'cancel' },
+      ],
+    });
 
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
+    await actionSheet.present();
+  }
 
-    if (!file) return;
+  // Vérifier et afficher la photo choisie
+  setPhoto(file: File) {
 
     // Vérifier le format
     if (!file.type.startsWith('image/')) {
       this.errorMessage.set('Please select a valid image.');
-      input.value = '';
       return;
     }
 
     // Vérifier la taille maximale : 5 MB
     if (file.size > 5 * 1024 * 1024) {
       this.errorMessage.set('Image must be smaller than 5 MB.');
-      input.value = '';
       return;
     }
 

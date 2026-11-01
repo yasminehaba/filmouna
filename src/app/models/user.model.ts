@@ -8,4 +8,5 @@ export interface AppUser {
   photo: string;
   role: 'user' | 'admin';
   disabled: boolean;
+  favorites?: string[];   // ids des films favoris
 }
