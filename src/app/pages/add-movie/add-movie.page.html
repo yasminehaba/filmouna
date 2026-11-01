@@ -65,22 +65,22 @@
         </ion-select>
       </ion-item>
 
-      <ion-label>Acteurs (séparés par des virgules)</ion-label>
+      <ion-label>Acteurs (séparés par des virgules) *</ion-label>
       <ion-item lines="none" class="input-item">
         <ion-input name="actors" [(ngModel)]="form.actors" placeholder="Leonardo DiCaprio, Tom Hardy"></ion-input>
       </ion-item>
 
-      <ion-label>Description</ion-label>
+      <ion-label>Description *</ion-label>
       <ion-item lines="none" class="input-item">
         <ion-textarea name="description" [(ngModel)]="form.description" [autoGrow]="true" placeholder="Résumé du film"></ion-textarea>
       </ion-item>
 
-      <ion-label>Affiche (URL de l'image)</ion-label>
+      <ion-label>Affiche (URL de l'image) *</ion-label>
       <ion-item lines="none" class="input-item">
         <ion-input name="photo" type="url" [(ngModel)]="form.photo" placeholder="https://..."></ion-input>
       </ion-item>
 
-      <ion-label>Bande-annonce (lien YouTube)</ion-label>
+      <ion-label>Bande-annonce (lien YouTube) *</ion-label>
       <ion-item lines="none" class="input-item">
         <ion-input name="trailer" type="url" [(ngModel)]="form.trailer" placeholder="https://www.youtube.com/watch?v=..."></ion-input>
       </ion-item>

@@ -130,16 +130,28 @@ export class AddMoviePage implements OnInit {
     this.errorMessage.set('');
 
     const f = this.form;
+    const actors = f.actors.split(',').map((a) => a.trim()).filter(Boolean);
 
-    if (!f.title.trim() || !f.director.trim() || !f.year || !f.duration || f.categories.length === 0) {
-      this.errorMessage.set('Veuillez remplir le titre, le réalisateur, l\'année, la durée et au moins une catégorie.');
+    // Tous les champs sont obligatoires
+    if (
+      !f.title.trim() ||
+      !f.director.trim() ||
+      !f.year ||
+      !f.duration ||
+      f.categories.length === 0 ||
+      actors.length === 0 ||
+      !f.description.trim() ||
+      !f.photo.trim() ||
+      !f.trailer.trim()
+    ) {
+      this.errorMessage.set('Veuillez remplir tous les champs.');
       return;
     }
 
     const film: Film = {
       title: f.title.trim(),
       director: f.director.trim(),
-      actors: f.actors.split(',').map((a) => a.trim()).filter(Boolean),
+      actors,
       description: f.description.trim(),
       categories: f.categories,
       year: Number(f.year),
