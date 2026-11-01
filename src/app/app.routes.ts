@@ -23,6 +23,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/movie-details/movie-details.page').then((m) => m.MovieDetailsPage),
   },
   {
+    // Ajouter un film
+    path: 'add-movie',
+    loadComponent: () => import('./pages/add-movie/add-movie.page').then((m) => m.AddMoviePage),
+  },
+  {
+    // Modifier un film (même page, avec l'id)
+    path: 'add-movie/:id',
+    loadComponent: () => import('./pages/add-movie/add-movie.page').then((m) => m.AddMoviePage),
+  },
+  {
     path: 'tabs',
     loadComponent: () => import('./pages/tabs/tabs.page').then((m) => m.TabsPage),
     children: [

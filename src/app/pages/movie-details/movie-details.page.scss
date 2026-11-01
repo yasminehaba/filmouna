@@ -1,0 +1,82 @@
+.center {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty {
+  color: #888;
+
+  ion-icon {
+    font-size: 60px;
+    margin-bottom: 10px;
+  }
+}
+
+.poster {
+  background: #141414;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+
+  img {
+    width: 200px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+  }
+}
+
+.video {
+  background: #000;
+  aspect-ratio: 16 / 9;
+
+  iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+}
+
+.details {
+  padding: 20px;
+
+  h1 {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0 0 12px;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 22px 0 8px;
+  }
+}
+
+.infos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: #666;
+  font-size: 14px;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.description {
+  color: #444;
+  line-height: 1.5;
+}

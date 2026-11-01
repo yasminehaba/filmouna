@@ -63,8 +63,8 @@ export class MoviesPage {
 
   // Liste filtrée, recalculée automatiquement quand la recherche ou les films changent
   filteredMovies = computed(() => {
-    const q = this.search().toLowerCase().trim();
-    return this.movies().filter((m) => m.title.toLowerCase().includes(q));
+    const strSearch = this.search().toLowerCase().trim();
+    return this.movies().filter((m) => m.title.toLowerCase().includes(strSearch));
   });
 
   constructor() {

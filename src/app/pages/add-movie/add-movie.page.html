@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/movies"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ isEdit() ? 'Modifier le film' : 'Ajouter un film' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  @if (loading()) {
+    <div class="center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  } @else {
+
+    <!-- Aperçu de l'affiche -->
+    @if (form.photo) {
+      <div class="poster">
+        <img [src]="form.photo" alt="Affiche" />
+      </div>
+    }
+
+    <form (ngSubmit)="save()">
+
+      <ion-label>Titre *</ion-label>
+      <ion-item lines="none" class="input-item">
+        <ion-input name="title" [(ngModel)]="form.title" placeholder="Ex : Inception"></ion-input>
+      </ion-item>
+
+      <ion-label>Réalisateur *</ion-label>
+      <ion-item lines="none" class="input-item">
+        <ion-input name="director" [(ngModel)]="form.director" placeholder="Ex : Christopher Nolan"></ion-input>
+      </ion-item>
+
+      <div class="row">
+        <div>
+          <ion-label>Année *</ion-label>
+          <ion-item lines="none" class="input-item">
+            <ion-input name="year" type="number" [(ngModel)]="form.year" placeholder="2010"></ion-input>
+          </ion-item>
+        </div>
+        <div>
+          <ion-label>Durée (min) *</ion-label>
+          <ion-item lines="none" class="input-item">
+            <ion-input name="duration" type="number" [(ngModel)]="form.duration" placeholder="148"></ion-input>
+          </ion-item>
+        </div>
+      </div>
+
+      <ion-label>Catégories *</ion-label>
+      <ion-item lines="none" class="input-item">
+        <ion-select
+          name="categories"
+          [(ngModel)]="form.categories"
+          [multiple]="true"
+          placeholder="Choisir"
+          cancelText="Annuler"
+          okText="OK">
+          @for (cat of categories; track cat) {
+            <ion-select-option [value]="cat">{{ cat }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-label>Acteurs (séparés par des virgules)</ion-label>
+      <ion-item lines="none" class="input-item">
+        <ion-input name="actors" [(ngModel)]="form.actors" placeholder="Leonardo DiCaprio, Tom Hardy"></ion-input>
+      </ion-item>
+
+      <ion-label>Description</ion-label>
+      <ion-item lines="none" class="input-item">
+        <ion-textarea name="description" [(ngModel)]="form.description" [autoGrow]="true" placeholder="Résumé du film"></ion-textarea>
+      </ion-item>
+
+      <ion-label>Affiche (URL de l'image)</ion-label>
+      <ion-item lines="none" class="input-item">
+        <ion-input name="photo" type="url" [(ngModel)]="form.photo" placeholder="https://..."></ion-input>
+      </ion-item>
+
+      <ion-label>Bande-annonce (lien YouTube)</ion-label>
+      <ion-item lines="none" class="input-item">
+        <ion-input name="trailer" type="url" [(ngModel)]="form.trailer" placeholder="https://www.youtube.com/watch?v=..."></ion-input>
+      </ion-item>
+
+      @if (errorMessage()) {
+        <ion-text color="danger">
+          <p>{{ errorMessage() }}</p>
+        </ion-text>
+      }
+
+      @if (saving()) {
+        <div class="spinner-box">
+          <ion-spinner name="crescent"></ion-spinner>
+        </div>
+      } @else {
+        <ion-button expand="block" type="submit" class="save-button">
+          {{ isEdit() ? 'Enregistrer les modifications' : 'Ajouter le film' }}
+        </ion-button>
+      }
+
+    </form>
+  }
+
+</ion-content>

@@ -1,13 +1,95 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>movie-details</ion-title>
+    <!-- Bouton retour -->
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/movies"></ion-back-button>
+    </ion-buttons>
+
+    <ion-title>{{ film()?.title }}</ion-title>
+
+    <ion-buttons slot="end">
+      @if (film()) {
+        @if (isAdmin()) {
+          <ion-button (click)="editMovie()">
+            <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+          </ion-button>
+        } @else {
+          <ion-button (click)="toggleFavorite()">
+            <ion-icon
+              slot="icon-only"
+              color="danger"
+              [name]="isFavorite() ? 'heart' : 'heart-outline'">
+            </ion-icon>
+          </ion-button>
+        }
+      }
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">movie-details</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  @if (loading()) {
+    <div class="center">
+      <ion-spinner name="crescent"></ion-spinner>
+    </div>
+  } @else if (!film()) {
+    <div class="center empty">
+      <ion-icon name="film-outline"></ion-icon>
+      <p>Film introuvable</p>
+    </div>
+  } @else {
+    @let f = film()!;
+
+    @if (trailerUrl()) {
+      <!-- Bande-annonce lue directement dans l'app -->
+      <div class="video">
+        <iframe
+          [src]="trailerUrl()"
+          title="Bande-annonce"
+          allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+          allowfullscreen
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+      </div>
+    } @else {
+      <!-- Pas de vidéo YouTube valide : on affiche l'affiche -->
+      <div class="poster">
+        <img [src]="f.photo" [alt]="f.title" />
+      </div>
+    }
+
+    <div class="details">
+
+      <h1>{{ f.title }}</h1>
+
+      <!-- Année / durée / réalisateur -->
+      <div class="infos">
+        <span><ion-icon name="calendar-outline"></ion-icon> {{ f.year }}</span>
+        <span><ion-icon name="time-outline"></ion-icon> {{ f.duration }} min</span>
+        <span><ion-icon name="person-outline"></ion-icon> {{ f.director }}</span>
+      </div>
+
+      <!-- Catégories -->
+      <div class="chips">
+        @for (cat of f.categories; track cat) {
+          <ion-chip color="tertiary"><ion-label>{{ cat }}</ion-label></ion-chip>
+        }
+      </div>
+
+      <!-- Description -->
+      <h3>Description</h3>
+      <p class="description">{{ f.description }}</p>
+
+      <!-- Acteurs -->
+      <h3>Acteurs</h3>
+      <div class="chips">
+        @for (actor of f.actors; track actor) {
+          <ion-chip outline><ion-label>{{ actor }}</ion-label></ion-chip>
+        }
+      </div>
+
+    </div>
+  }
+
 </ion-content>
