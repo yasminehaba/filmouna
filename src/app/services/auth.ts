@@ -5,6 +5,7 @@ import {
   createUserWithEmailAndPassword,
   EmailAuthProvider,
   reauthenticateWithCredential,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signOut,
   updatePassword
@@ -135,4 +136,7 @@ export class Auth {
   logout() {
     return signOut(auth);
   }
+  async forgotPassword(email: string): Promise<void> {
+  await sendPasswordResetEmail(auth, email);
+}
 }

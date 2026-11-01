@@ -1,13 +1,75 @@
-<ion-header [translucent]="true">
+
+<ion-header>
   <ion-toolbar>
-    <ion-title>favorites</ion-title>
+    <ion-title>Mes favoris</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">favorites</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content>
+
+  @if (loading()) {
+
+    <div class="center">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Chargement des favoris...</p>
+    </div>
+
+  } @else if (errorMessage()) {
+
+    <div class="center">
+      <ion-text color="danger">
+        <p>{{ errorMessage() }}</p>
+      </ion-text>
+    </div>
+
+  } @else if (favoriteMovies().length === 0) {
+
+    <div class="center empty">
+      <ion-icon name="heart-outline"></ion-icon>
+      <h2>Aucun favori</h2>
+      <p>Les films que vous ajoutez aux favoris apparaîtront ici.</p>
+    </div>
+
+  } @else {
+
+    <ion-list>
+
+      @for (film of favoriteMovies(); track film.id) {
+
+        <ion-item
+          button
+          [routerLink]="['/movie-details', film.id]">
+
+          <ion-thumbnail slot="start">
+            <img
+              [src]="film.photo"
+              [alt]="film.title"
+            />
+          </ion-thumbnail>
+
+          <ion-label>
+            <h2>{{ film.title }}</h2>
+            <p>{{ film.year }} · {{ film.duration }} min</p>
+            <p>{{ film.categories.join(', ') }}</p>
+          </ion-label>
+
+          <ion-button
+            fill="clear"
+            slot="end"
+            color="danger"
+            (click)="toggleFavorite(film, $event)">
+
+            <ion-icon
+              slot="icon-only"
+              name="heart">
+            </ion-icon>
+
+          </ion-button>
+
+        </ion-item>
+      }
+
+    </ion-list>
+  }
+
 </ion-content>
