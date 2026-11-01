@@ -1,13 +1,156 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+
+  <div class="register-container">
+
+    <!-- Header -->
+    <div class="register-header">
+      <ion-icon name="film-outline"></ion-icon>
+      <h1>Create Account</h1>
+      <p>Join Filmouna and discover your favorite movies.</p>
+    </div>
+
+    <ion-card>
+      <ion-card-content>
+
+        <form #f="ngForm" (ngSubmit)="submitHandler(f.value)">
+
+          <!-- Profile Photo -->
+          <div class="photo-section">
+
+            <label for="photoInput" class="photo-upload">
+
+              <img
+                *ngIf="photoPreview"
+                [src]="photoPreview"
+                alt="Profile photo">
+
+              <ion-icon
+                *ngIf="!photoPreview"
+                name="person-circle-outline">
+              </ion-icon>
+
+              <span class="camera-icon">
+                <ion-icon name="camera-outline"></ion-icon>
+              </span>
+
+            </label>
+
+            <input
+              id="photoInput"
+              type="file"
+              accept="image/*"
+              (change)="onPhotoSelected($event)"
+              hidden>
+
+            <h3>Profile Photo</h3>
+            <p>Choose a profile picture (optional)</p>
+
+          </div>
+
+          <!-- Last Name -->
+          <ion-label>Last Name</ion-label>
+
+          <ion-item lines="none" class="input-item">
+            <ion-input
+              name="nom"
+              ngModel
+              placeholder="Enter your last name"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <!-- First Name -->
+          <ion-label>First Name</ion-label>
+
+          <ion-item lines="none" class="input-item">
+            <ion-input
+              name="prenom"
+              ngModel
+              placeholder="Enter your first name"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <!-- Age -->
+          <ion-label>Age</ion-label>
+
+          <ion-item lines="none" class="input-item">
+            <ion-input
+              name="age"
+              ngModel
+              type="number"
+              placeholder="Enter your age"
+              min="1"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <!-- Email -->
+          <ion-label>Email Address</ion-label>
+
+          <ion-item lines="none" class="input-item">
+            <ion-icon
+              name="mail-outline"
+              slot="start">
+            </ion-icon>
+
+            <ion-input
+              name="email"
+              ngModel
+              type="email"
+              placeholder="Enter your email"
+              email
+              required>
+            </ion-input>
+          </ion-item>
+
+          <!-- Password -->
+          <ion-label>Password</ion-label>
+
+          <ion-item lines="none" class="input-item">
+            <ion-icon
+              name="lock-closed-outline"
+              slot="start">
+            </ion-icon>
+
+            <ion-input
+              name="password"
+              ngModel
+              type="password"
+              placeholder="Enter your password"
+              minlength="6"
+              required>
+            </ion-input>
+          </ion-item>
+
+          <!-- Error Message -->
+          <ion-text color="danger" *ngIf="errorMessage">
+            <p>{{ errorMessage }}</p>
+          </ion-text>
+
+          <!-- Register Button -->
+          <ion-button
+            expand="block"
+            type="submit"
+            class="register-button"
+            [disabled]="f.invalid || loading">
+
+            {{ loading ? 'Creating account...' : 'Create Account' }}
+
+          </ion-button>
+
+        </form>
+
+        <!-- Login Link -->
+        <div class="login-link">
+          <span>Already have an account?</span>
+          <a routerLink="/login"> Login</a>
+        </div>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
 </ion-content>
