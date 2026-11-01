@@ -36,19 +36,26 @@
               ngModel
               placeholder="Enter your password"
               required>
+              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
             </ion-input>
           </ion-item>
- <ion-text color="danger" *ngIf="errorMessage">
-            <p>{{ errorMessage }}</p>
+          <ion-text color="danger" *ngIf="errorMessage()">
+          <p>{{ errorMessage() }}</p>
           </ion-text>
           <div class="forgot-password">
             <a>Forgot Password?</a>
           </div>
 
           <!-- Login Button -->
-          <ion-button expand="block" type="submit" class="login-button">
-            Login
-          </ion-button>
+          @if (loading()) {
+            <div class="spinner-box">
+              <ion-spinner name="crescent"></ion-spinner>
+            </div>
+          } @else {
+            <ion-button expand="block" type="submit" class="login-button">
+              Login
+            </ion-button>
+          }
 
         </form>
 

@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -13,7 +13,9 @@ import {
   IonItem,
   IonIcon,
   IonText,
-  IonHeader
+  IonHeader,
+  IonInputPasswordToggle,
+  IonSpinner
 } from '@ionic/angular';
 
 import { Router, RouterLink } from '@angular/router';
@@ -45,12 +47,14 @@ import { AppUser } from '../../models/user.model';
     IonItem,
     IonIcon,
     IonText,
-    IonHeader
-  ]
+    IonInputPasswordToggle,
+    IonSpinner
+]
 })
 export class LoginPage {
 
-  errorMessage = '';
+  errorMessage = signal('');
+  loading = signal(false);
 
   constructor(
     private authService: Auth,
@@ -67,7 +71,8 @@ export class LoginPage {
 
   async submitHandler(data: any) {
 
-    this.errorMessage = '';
+    this.errorMessage.set('');
+    this.loading.set(true);
 
     try {
 
@@ -85,6 +90,13 @@ export class LoginPage {
 
       console.log('Current user:', currentUser);
       console.log('role:', currentUser?.role);
+
+      // Compte désactivé par l'admin
+      if (currentUser?.disabled) {
+        await this.authService.logout();
+        this.errorMessage.set('Votre compte est désactivé. Veuillez contacter l\'administrateur.');
+        return;
+      }
 
       // Redirection
       if (currentUser?.role === 'admin') {
@@ -104,20 +116,22 @@ export class LoginPage {
       switch (error.code) {
 
         case 'auth/invalid-credential':
-          this.errorMessage = 'Email ou mot de passe incorrect.';
+          this.errorMessage.set('Email ou mot de passe incorrect.');
           break;
 
         case 'auth/invalid-email':
-          this.errorMessage = 'Email invalide.';
+          this.errorMessage.set('Email invalide.');
           break;
 
         case 'auth/user-disabled':
-          this.errorMessage = 'Ce compte est désactivé.';
+          this.errorMessage.set('Ce compte est désactivé.');
           break;
 
         default:
-          this.errorMessage = 'Erreur lors de la connexion.';
+          this.errorMessage.set('Erreur lors de la connexion.');
       }
+    } finally {
+      this.loading.set(false);
     }
   }
 }

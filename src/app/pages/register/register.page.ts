@@ -1,5 +1,5 @@
 
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -12,7 +12,9 @@ import {
   IonInput,
   IonItem,
   IonIcon,
-  IonText
+  IonText,
+  IonInputPasswordToggle,
+  IonSpinner
 } from '@ionic/angular';
 
 import { Router, RouterLink } from '@angular/router';
@@ -46,19 +48,21 @@ import { Auth } from '../../services/auth';
     IonInput,
     IonItem,
     IonIcon,
-    IonText
+    IonText,
+    IonInputPasswordToggle,
+    IonSpinner
   ]
 })
 export class RegisterPage {
 
-  errorMessage = '';
-  loading = false;
+  errorMessage = signal('');
+  loading = signal(false);
 
   // Photo sélectionnée par l'utilisateur
   selectedPhoto: File | null = null;
 
   // Aperçu de la photo
-  photoPreview = '';
+  photoPreview = signal('');
 
   constructor(
     private authService: Auth,
@@ -83,26 +87,26 @@ export class RegisterPage {
 
     // Vérifier le format
     if (!file.type.startsWith('image/')) {
-      this.errorMessage = 'Please select a valid image.';
+      this.errorMessage.set('Please select a valid image.');
       input.value = '';
       return;
     }
 
     // Vérifier la taille maximale : 5 MB
     if (file.size > 5 * 1024 * 1024) {
-      this.errorMessage = 'Image must be smaller than 5 MB.';
+      this.errorMessage.set('Image must be smaller than 5 MB.');
       input.value = '';
       return;
     }
 
-    this.errorMessage = '';
+    this.errorMessage.set('');
     this.selectedPhoto = file;
 
     // Afficher l'aperçu
     const reader = new FileReader();
 
     reader.onload = () => {
-      this.photoPreview = reader.result as string;
+      this.photoPreview.set(reader.result as string);
     };
 
     reader.readAsDataURL(file);
@@ -181,11 +185,11 @@ export class RegisterPage {
   // Inscription
   async submitHandler(data: any) {
 
-    this.errorMessage = '';
+    this.errorMessage.set('');
 
-    if (this.loading) return;
+    if (this.loading()) return;
 
-    this.loading = true;
+    this.loading.set(true);
 
     try {
 
@@ -226,30 +230,31 @@ export class RegisterPage {
       switch (error.code) {
 
         case 'auth/email-already-in-use':
-          this.errorMessage = 'This email is already registered.';
+          this.errorMessage.set('This email is already registered.');
           break;
 
         case 'auth/invalid-email':
-          this.errorMessage = 'Invalid email address.';
+          this.errorMessage.set('Invalid email address.');
           break;
 
         case 'auth/weak-password':
-          this.errorMessage = 'Password must contain at least 6 characters.';
+          this.errorMessage.set('Password must contain at least 6 characters.');
           break;
 
         case 'permission-denied':
         case 'firestore/permission-denied':
-          this.errorMessage = 'Firestore access denied. Check your security rules.';
+          this.errorMessage.set('Firestore access denied. Check your security rules.');
           break;
 
         default:
-          this.errorMessage =
-            error.message || 'An error occurred during registration.';
+          this.errorMessage.set(
+            error.message || 'An error occurred during registration.'
+          );
       }
 
     } finally {
 
-      this.loading = false;
+      this.loading.set(false);
 
     }
   }

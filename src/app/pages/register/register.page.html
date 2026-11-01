@@ -21,12 +21,12 @@
             <label for="photoInput" class="photo-upload">
 
               <img
-                *ngIf="photoPreview"
-                [src]="photoPreview"
+                *ngIf="photoPreview()"
+                [src]="photoPreview()"
                 alt="Profile photo">
 
               <ion-icon
-                *ngIf="!photoPreview"
+                *ngIf="!photoPreview()"
                 name="person-circle-outline">
               </ion-icon>
 
@@ -121,24 +121,31 @@
               placeholder="Enter your password"
               minlength="6"
               required>
+              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
             </ion-input>
           </ion-item>
 
           <!-- Error Message -->
-          <ion-text color="danger" *ngIf="errorMessage">
-            <p>{{ errorMessage }}</p>
+          <ion-text color="danger" *ngIf="errorMessage()">
+            <p>{{ errorMessage() }}</p>
           </ion-text>
 
           <!-- Register Button -->
-          <ion-button
-            expand="block"
-            type="submit"
-            class="register-button"
-            [disabled]="f.invalid || loading">
+          @if (loading()) {
+            <div class="spinner-box">
+              <ion-spinner name="crescent"></ion-spinner>
+            </div>
+          } @else {
+            <ion-button
+              expand="block"
+              type="submit"
+              class="register-button"
+              [disabled]="f.invalid">
 
-            {{ loading ? 'Creating account...' : 'Create Account' }}
+              Create Account
 
-          </ion-button>
+            </ion-button>
+          }
 
         </form>
 
