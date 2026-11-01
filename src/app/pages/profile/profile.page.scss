@@ -1,0 +1,152 @@
+
+.profile-container {
+  min-height: 100%;
+  background: #f4f5fa;
+  padding: 25px 18px 35px;
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 22px;
+
+  > ion-icon {
+    font-size: 45px;
+    color: var(--ion-color-tertiary);
+  }
+
+  h1 {
+    color: #25243a;
+    font-size: 26px;
+    font-weight: 700;
+  }
+
+  p {
+    color: #888;
+    font-size: 14px;
+  }
+}
+
+.profile-card {
+  max-width: 450px;
+  margin: 0 auto;
+  border-radius: 18px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.07);
+
+  ion-card-content {
+    padding: 25px 20px;
+  }
+}
+
+.profile-photo-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 28px;
+
+  h2 {
+    color: #25243a;
+    font-size: 21px;
+    font-weight: 700;
+  }
+}
+
+.profile-photo,
+.default-avatar {
+  width: 115px;
+  height: 115px;
+  border-radius: 50%;
+  border: 3px solid var(--ion-color-tertiary);
+}
+
+.profile-photo {
+  object-fit: cover;
+}
+
+.default-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eeeafb;
+
+  ion-icon {
+    font-size: 65px;
+    color: var(--ion-color-tertiary);
+  }
+}
+
+.role-badge {
+  background: #eeeafb;
+  color: var(--ion-color-tertiary);
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.section-title h3 {
+  color: #25243a;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 13px 10px;
+  margin-bottom: 10px;
+  background: #f7f7fa;
+  border-radius: 10px;
+
+  > ion-icon {
+    font-size: 23px;
+    color: var(--ion-color-tertiary);
+  }
+
+  div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  span {
+    color: #999;
+    font-size: 12px;
+  }
+
+  strong {
+    color: #25243a;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+}
+
+.action-button,
+.password-button {
+  margin-top: 15px;
+  height: 47px;
+  --border-radius: 10px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.logout-button {
+  margin-top: 12px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.message {
+  text-align: center;
+  font-size: 13px;
+}
+
+.loading-container {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

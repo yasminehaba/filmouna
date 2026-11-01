@@ -1,0 +1,94 @@
+
+<ion-content class="ion-padding">
+
+  <div class="edit-container">
+
+    <div class="page-header">
+      <ion-button fill="clear" (click)="goBack()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+
+      <h1>Modifier le mot de passe</h1>
+      <p>Assurez la sécurité de votre compte</p>
+    </div>
+
+    <ion-card class="edit-card">
+      <ion-card-content>
+
+        <div class="password-icon">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+        </div>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Mot de passe actuel</ion-label>
+          <ion-input
+            type="password"
+            [ngModel]="currentPassword()"
+            (ngModelChange)="currentPassword.set($event)"
+            placeholder="Mot de passe actuel">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Nouveau mot de passe</ion-label>
+          <ion-input
+            type="password"
+            [ngModel]="newPassword()"
+            (ngModelChange)="newPassword.set($event)"
+            placeholder="Nouveau mot de passe">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Confirmer le mot de passe</ion-label>
+          <ion-input
+            type="password"
+            [ngModel]="confirmPassword()"
+            (ngModelChange)="confirmPassword.set($event)"
+            placeholder="Confirmer le mot de passe">
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </ion-item>
+
+        @if (errorMessage()) {
+          <ion-text color="danger">
+            <p class="message">{{ errorMessage() }}</p>
+          </ion-text>
+        }
+
+        @if (successMessage()) {
+          <ion-text color="success">
+            <p class="message">{{ successMessage() }}</p>
+          </ion-text>
+        }
+
+        <ion-button
+          expand="block"
+          class="action-button"
+          [disabled]="saving()"
+          (click)="changePassword()">
+
+          @if (saving()) {
+            <ion-spinner name="crescent"></ion-spinner>
+          } @else {
+            <ion-icon name="save-outline" slot="start"></ion-icon>
+            Modifier le mot de passe
+          }
+
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          fill="clear"
+          (click)="goBack()">
+          Annuler
+        </ion-button>
+
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+</ion-content>

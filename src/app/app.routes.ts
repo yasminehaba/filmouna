@@ -57,10 +57,26 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/profile/profile.page').then((m) => m.ProfilePage),
       },
       {
+        path: 'edit-profile',
+        loadComponent: () => import('./pages/edit-profile/edit-profile.page').then((m) => m.EditProfilePage),
+      },
+      {
+        path: 'edit-pwd',
+        loadComponent: () => import('./pages/edit-pwd/edit-pwd.page').then((m) => m.EditPwdPage),
+      },
+      {
         path: '',
         redirectTo: 'movies',
         pathMatch: 'full',
       },
     ],
+  },
+  {
+    path: 'edit-profile',
+    loadComponent: () => import('./pages/edit-profile/edit-profile.page').then((m) => m.EditProfilePage),
+  },
+  {
+    path: 'edit-pwd',
+    loadComponent: () => import('./pages/edit-pwd/edit-pwd.page').then((m) => m.EditPwdPage),
   },
 ];
